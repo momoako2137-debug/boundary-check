@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バウンダリー診断｜桃木亜子</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #f2a7b0;
+    --pink-light: #fde8eb;
+    --cream: #fffaf3;
+    --brown: #5b4033;
+    --brown-light: #8a6e60;
+    --line-green: #06c755;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--brown);
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-weight: 500;
+    line-height: 1.8;
+  }
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .screen { display: none; flex: 1; flex-direction: column; }
+  .screen.active { display: flex; }
+  h1 {
+    font-size: 1.35rem;
+    text-align: center;
+    margin: 16px 0 4px;
+    line-height: 1.5;
+  }
+  .sub {
+    text-align: center;
+    color: var(--brown-light);
+    font-size: 0.95rem;
+    margin: 0 0 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 2px 10px rgba(91, 64, 51, 0.08);
+  }
+  .card p { margin: 0 0 12px; }
+  .note { font-size: 0.85rem; color: var(--brown-light); }
+  .btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 14px;
+  }
+  .btn-main { background: var(--pink); color: #fff; }
+  .btn-sub { background: #fff; color: var(--brown); border: 2px solid var(--pink); }
+  .btn-line { background: var(--line-green); color: #fff; }
+  .btn-text {
+    background: none;
+    color: var(--brown-light);
+    font-weight: 400;
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+  .btn:disabled { visibility: hidden; }
+
+  /* 質問の画面 */
+  .progress {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--brown-light);
+    margin: 8px 0;
+  }
+  .bar {
+    height: 8px;
+    background: var(--pink-light);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .bar-inner {
+    height: 100%;
+    background: var(--pink);
+    width: 0;
+    transition: width 0.3s;
+  }
+  .question {
+    font-size: 1.2rem;
+    font-weight: 700;
+    min-height: 7.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* 結果の画面 */
+  .result-label { text-align: center; margin: 8px 0 0; }
+  .type-name {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 4px 0 16px;
+    line-height: 1.5;
+  }
+  .type-name span { font-size: 1rem; }
+  .type-desc { text-align: center; margin-bottom: 20px; }
+  .type-block + .type-block {
+    border-top: 1px dashed var(--pink);
+    padding-top: 16px;
+  }
+  .line-box {
+    background: var(--pink-light);
+    border-radius: 16px;
+    padding: 18px 16px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .line-box .key {
+    display: inline-block;
+    background: #fff;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 2px;
+  }
+  footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--brown-light);
+    margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- はじめの画面 -->
+  <section class="screen active" id="start">
+    <h1>自分も相手も大切にする<br>バウンダリー診断</h1>
+    <p class="sub">あなたの心の境界線は、どのタイプ？</p>
+    <div class="card">
+      <p>家族や友だちとの、ふだんの関わりを思い出してみてください。</p>
+      <p>「あてはまる」か「あてはまらない」かを、15問、選んでいきます。</p>
+      <p>あてはまるものが多かったタイプが、いまのあなたの心の境界線<span style="white-space:nowrap;">（バウンダリー）</span>のクセです。</p>
+      <p class="note">※ いい・悪いを決めるものではありません。自分を知るきっかけにしてください。</p>
+    </div>
+    <button class="btn btn-main" onclick="startQuiz()">はじめる</button>
+  </section>
+
+  <!-- 質問の画面 -->
+  <section class="screen" id="quiz">
+    <p class="progress" id="progress"></p>
+    <div class="bar"><div class="bar-inner" id="bar"></div></div>
+    <div class="card">
+      <p class="question" id="question"></p>
+    </div>
+    <button class="btn btn-main" onclick="answer(true)">あてはまる</button>
+    <button class="btn btn-sub" onclick="answer(false)">あてはまらない</button>
+    <button class="btn btn-text" id="backBtn" onclick="goBack()">← ひとつ前にもどる</button>
+  </section>
+
+  <!-- 結果の画面 -->
+  <section class="screen" id="result">
+    <div class="card" id="resultCard"></div>
+    <div class="line-box" id="lineBox"></div>
+    <a class="btn btn-line" href="https://lin.ee/vgRykdu" target="_blank" rel="noopener">公式ラインを友だち追加する</a>
+    <button class="btn btn-sub" onclick="restart()">もう一回やる</button>
+    <p class="note" style="text-align:center;margin-top:16px;">どのタイプにも、いい・悪いはありません。<br>自分のクセを知ることが、ちょうどいい距離を見つける第一歩です。</p>
+  </section>
+
+  <footer>思春期子育て専門保健師　桃木亜子</footer>
+</div>
+
+<script>
+  // 出す順番は固定（紙の診断と同じ）。type は A・B・C
+  const questions = [
+    { type: "A", text: "家族や友だちの機嫌が悪いと、自分までどんよりした気分になる。" },
+    { type: "B", text: "家族の部屋や持ち物に、ひと声かけずに入ったりさわったりしてしまう。" },
+    { type: "C", text: "家族や友だちが泣いたり怒ったりしていると、その場をはなれたくなる。" },
+    { type: "A", text: "自分がしたいことより、相手がしてほしいことを先にしてしまう。" },
+    { type: "C", text: "けんかになりそうだと、めんどうで、その人と関わらないようにする。" },
+    { type: "B", text: "自分のやり方が正しいと思うと、相手にも同じようにしてほしくなる。" },
+    { type: "A", text: "たのまれると断れず、つい「いいよ」と言ってしまう。" },
+    { type: "C", text: "相談されても、「それは自分でなんとかして」と思ってしまう。" },
+    { type: "B", text: "相手が思いどおりに動いてくれないと、むっとしてしまう。" },
+    { type: "A", text: "家族や友だちの悩みを、自分のことのように抱えこんでしまう。" },
+    { type: "B", text: "友だちや家族が悩んでいると、話を聞く前に「こうしたらいいよ」と言ってしまう。" },
+    { type: "C", text: "家族でも、自分の時間やペースをじゃまされると、すごくいやな気持ちになる。" },
+    { type: "A", text: "人と長くいっしょにいると、ぐったり疲れてしまう。" },
+    { type: "C", text: "人と深い話をするのが、なんとなくにがてに感じる。" },
+    { type: "B", text: "アドバイスを聞いてもらえないと、「なんでわかってくれないの」とイライラする。" }
+  ];
+
+  const types = {
+    A: { name: "染み込むザル", desc: "相手の気持ちを、自分の中に取りこみやすいタイプ。" },
+    B: { name: "染み出すザル", desc: "自分の考えを、相手の中に流しこみやすいタイプ。" },
+    C: { name: "鉄壁の要塞", desc: "気持ちのやりとりを、さけやすいタイプ。" }
+  };
+
+  let current = 0;
+  let answers = [];
+
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  function startQuiz() {
+    current = 0;
+    answers = [];
+    show("quiz");
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    document.getElementById("progress").textContent = (current + 1) + " ／ " + questions.length;
+    document.getElementById("bar").style.width = (current / questions.length * 100) + "%";
+    document.getElementById("question").textContent = questions[current].text;
+    document.getElementById("backBtn").disabled = current === 0;
+  }
+
+  function answer(yes) {
+    answers[current] = yes;
+    current++;
+    if (current < questions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function goBack() {
+    if (current > 0) {
+      current--;
+      renderQuestion();
+    }
+  }
+
+  function restart() {
+    show("start");
+  }
+
+  function showResult() {
+    const count = { A: 0, B: 0, C: 0 };
+    questions.forEach((q, i) => { if (answers[i]) count[q.type]++; });
+    const max = Math.max(count.A, count.B, count.C);
+    const card = document.getElementById("resultCard");
+    const lineBox = document.getElementById("lineBox");
+
+    if (max === 0) {
+      // ひとつもチェックがつかなかったとき
+      card.innerHTML =
+        '<p class="type-desc" style="margin:0;">「あてはまる」が、ひとつもありませんでした。</p>' +
+        '<p class="type-desc" style="margin:0;">もう一度、家族や友だちとのふだんの様子を思い出して、やってみてください。</p>';
+      lineBox.innerHTML = '公式ラインでは、3つのタイプの結果を<br>見ることができます。<br>「<span class="key">A</span>」「<span class="key">B</span>」「<span class="key">C</span>」のどれかを送ってね。';
+      show("result");
+      return;
+    }
+
+    const top = ["A", "B", "C"].filter(t => count[t] === max);
+
+    if (top.length === 3) {
+      // 3つとも同じ数のとき
+      card.innerHTML =
+        '<p class="type-desc" style="margin:0;">3つのタイプが、同じ数でした。</p>' +
+        '<p class="type-desc" style="margin:0;">場面や相手によって、クセが入れかわるタイプかもしれません。</p>';
+      lineBox.innerHTML = 'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの記号<br>（<span class="key">A</span>・<span class="key">B</span>・<span class="key">C</span>）を送ってね。';
+      show("result");
+      return;
+    }
+
+    let html = '<p class="result-label">あなたは</p>';
+    top.forEach(t => {
+      html +=
+        '<div class="type-block">' +
+        '<p class="type-name">' + t + '　' + types[t].name + '<br><span>タイプ</span></p>' +
+        '<p class="type-desc">' + types[t].desc + '</p>' +
+        '</div>';
+    });
+    if (top.length > 1) {
+      html += '<p class="note" style="text-align:center;margin:0;">チェックの数が同じタイプがありました。<br>どちらも、いまのあなたのクセです。</p>';
+    }
+    card.innerHTML = html;
+
+    const keys = top.map(t => '<span class="key">' + t + '</span>').join("と");
+    lineBox.innerHTML =
+      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、' + keys + 'と送ってね。' +
+      (top.length > 1 ? '<br><span class="note">（1つずつ送ってください）</span>' : '');
+    show("result");
+  }
+</script>
+</body>
+</html>
