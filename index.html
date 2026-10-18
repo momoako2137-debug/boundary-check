@@ -296,7 +296,10 @@
       return;
     }
 
-    let html = '<p class="result-label">あなたは</p>';
+    // 同じ数のタイプがあるときは、説明を先に出す（タイプ名だけが並ぶと壊れて見えるため）
+    let html = top.length > 1
+      ? '<p class="type-desc">あなたは、2つのタイプが<br>同じ数でした。<br>どちらも、いまのあなたのクセです。</p>'
+      : '<p class="result-label">あなたは</p>';
     top.forEach(t => {
       html +=
         '<div class="type-block">' +
@@ -304,9 +307,6 @@
         '<p class="type-desc">' + types[t].desc + '</p>' +
         '</div>';
     });
-    if (top.length > 1) {
-      html += '<p class="note" style="text-align:center;margin:0;">チェックの数が同じタイプがありました。<br>どちらも、いまのあなたのクセです。</p>';
-    }
     card.innerHTML = html;
 
     const keys = top.map(t => '<span class="key">' + t + '</span>').join("と");
