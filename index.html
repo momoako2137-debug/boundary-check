@@ -286,20 +286,15 @@
 
     const top = ["A", "B", "C"].filter(t => count[t] === max);
 
-    if (top.length === 3) {
-      // 3つとも同じ数のとき
-      card.innerHTML =
-        '<p class="type-desc" style="margin:0;">3つのタイプが、同じ数でした。</p>' +
-        '<p class="type-desc" style="margin:0;">場面や相手によって、クセが入れかわるタイプかもしれません。</p>';
-      lineBox.innerHTML = 'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの記号<br>（<span class="key">A</span>・<span class="key">B</span>・<span class="key">C</span>）を送ってね。';
-      show("result");
-      return;
-    }
-
     // 同じ数のタイプがあるときは、説明を先に出す（タイプ名だけが並ぶと壊れて見えるため）
-    let html = top.length > 1
-      ? '<p class="type-desc">あなたは、2つのタイプが<br>同じ数でした。<br>どちらも、いまのあなたのクセです。</p>'
-      : '<p class="result-label">あなたは</p>';
+    let html;
+    if (top.length === 3) {
+      html = '<p class="type-desc">あなたは、3つのタイプが<br>同じ数でした。<br>場面や相手によって、<br>クセが入れかわるのかもしれません。</p>';
+    } else if (top.length === 2) {
+      html = '<p class="type-desc">あなたは、2つのタイプが<br>同じ数でした。<br>どちらも、いまのあなたのクセです。</p>';
+    } else {
+      html = '<p class="result-label">あなたは</p>';
+    }
     top.forEach(t => {
       html +=
         '<div class="type-block">' +
@@ -308,6 +303,12 @@
         '</div>';
     });
     card.innerHTML = html;
+
+    if (top.length === 3) {
+      lineBox.innerHTML = 'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの記号<br>（<span class="key">A</span>・<span class="key">B</span>・<span class="key">C</span>）を送ってね。';
+      show("result");
+      return;
+    }
 
     const keys = top.map(t => '<span class="key">' + t + '</span>').join("と");
     lineBox.innerHTML =
