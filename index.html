@@ -273,15 +273,20 @@
     const max = Math.max(count.A, count.B, count.C);
     const card = document.getElementById("resultCard");
     const lineBox = document.getElementById("lineBox");
-    // 記号以外の文字が入ると公式ラインの自動返信が動かないため、注意書きを添える
-    const sendNote = '<br><span class="note">記号だけを送ってください。<br>ほかの文字が入ると、うまく届きません。</span>';
+    // 公式ラインの自動返信は、合言葉と完全に同じ文字でしか動かないため、合言葉だけを送るよう案内する
+    const words = { A: "しみこむ", B: "しみだす", C: "ようさい" };
+    const sendNote = '<br><span class="note">合言葉だけを送ってください。<br>ほかの文字が入ると、うまく届きません。</span>';
+    // 3つとも同じ数・ひとつもなしのとき：3つの合言葉を並べて出す
+    const allWords =
+      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの<br>合言葉を送ってね。<br>' +
+      'A：' + words.A + '<br>B：' + words.B + '<br>C：' + words.C + sendNote;
 
     if (max === 0) {
       // ひとつもチェックがつかなかったとき
       card.innerHTML =
         '<p class="type-desc" style="margin:0;">「あてはまる」が、ひとつもありませんでした。</p>' +
         '<p class="type-desc" style="margin:0;">もう一度、家族や友だちとのふだんの様子を思い出して、やってみてください。</p>';
-      lineBox.innerHTML = 'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの記号<br>（<span class="key">A</span>・<span class="key">B</span>・<span class="key">C</span>）だけを送ってね。' + sendNote;
+      lineBox.innerHTML = allWords;
       show("result");
       return;
     }
@@ -307,15 +312,18 @@
     card.innerHTML = html;
 
     if (top.length === 3) {
-      lineBox.innerHTML = 'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの記号<br>（<span class="key">A</span>・<span class="key">B</span>・<span class="key">C</span>）だけを送ってね。' + sendNote;
+      lineBox.innerHTML = allWords;
       show("result");
       return;
     }
 
-    const keys = top.map(t => '<span class="key">' + t + '</span>').join("と");
+    const keys = top.map(t => '<span class="key">' + words[t] + '</span>');
     lineBox.innerHTML =
-      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、' + keys +
-      (top.length > 1 ? 'を、1つずつ送ってね。' : 'だけを送ってね。') + sendNote;
+      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、' +
+      (top.length > 1
+        ? '「' + keys.join('」と「') + '」を、<br>1つずつ送ってね。'
+        : '「' + keys[0] + '」とだけ送ってね。') +
+      sendNote;
     show("result");
   }
 </script>
