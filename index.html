@@ -288,7 +288,7 @@
       '自分も相手も大切にする<br>人間関係のための<br>ヒントです。<br><br>' +
       sendText + '<br>' + keyTypes.map(key).join('　') +
       '<br><span class="note">ほかの文字が入ると、うまく届きません。</span>';
-    const typeNames = ts => ts.map(t => '<p class="type-name">' + types[t].name + '</p>').join('');
+    const typeNames = ts => ts.map(t => '<p class="type-name">' + types[t].name + 'タイプ</p>').join('');
 
     if (max === 0) {
       // ひとつもあてはまらなかったとき：やり直しは頼まず、3つの合言葉を並べる
@@ -306,10 +306,8 @@
       // どのタイプも少なかったとき
       html = '<p class="type-desc">いまは、ちょうどいい距離が<br>とれているようです。</p>' +
         '<p class="result-label">その中で、少しだけ出やすいのは</p>' + typeNames(top);
-      if (top.length === 1) html += '<p class="result-label" style="margin-top:-12px;">タイプ</p>';
     } else if (top.length === 1) {
-      html = '<p class="result-label">あなたは</p>' + typeNames(top) +
-        '<p class="result-label" style="margin-top:-12px;">タイプ</p>';
+      html = '<p class="result-label">あなたは</p>' + typeNames(top);
     } else {
       // 同じ数のタイプが2つ以上あるとき
       html = '<p class="result-label">あなたは</p>' + typeNames(top) +
