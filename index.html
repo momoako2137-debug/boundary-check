@@ -161,15 +161,15 @@
 
   <!-- はじめの画面 -->
   <section class="screen active" id="start">
-    <h1>自分も相手も大切にする<br>バウンダリー診断</h1>
-    <p class="sub">あなたの心の境界線は、どのタイプ？</p>
+    <h1>家族や友だちとの関係が、<br>楽になる秘訣はバウンダリー！<br>自分の心のクセを知ろう！</h1>
+    <p class="sub">バウンダリー踏んでる？チェック付き</p>
     <img class="illust" src="illust.jpg" alt="えんぴつで線を引く人と、線の向こうでにっこりしている人">
     <button class="btn btn-main" style="margin:0 0 20px;" onclick="startQuiz()">はじめる</button>
     <div class="card">
-      <p>家族や友だちとの、ふだんの関わりを思い出してみてください。</p>
-      <p>「あてはまる」か「あてはまらない」かを、15問、選んでいきます。</p>
-      <p>あてはまるものが多かったタイプが、いまのあなたの心の境界線<span style="white-space:nowrap;">（バウンダリー）</span>のクセです。</p>
-      <p class="note">※ いい・悪いを決めるものではありません。自分を知るきっかけにしてください。</p>
+      <p>家族や友だちとの、ふだんの関わりを思い出して、21問に「あてはまる」「あてはまらない」で答えてください。</p>
+      <p>迷ったら、どちらかといえば近いほうを選んでください。</p>
+      <p>くわしい結果を、公式ラインからお渡しします。ぜひ受け取ってね。</p>
+      <p class="note">※ いい・悪いを決めるものではありません。</p>
     </div>
   </section>
 
@@ -188,7 +188,6 @@
   <!-- 結果の画面 -->
   <section class="screen" id="result">
     <div class="card" id="resultCard"></div>
-    <p class="note" style="text-align:center;margin:16px 0 0;">どのタイプにも、いい・悪いはありません。<br>自分のクセを知ることが、ちょうどいい距離を見つける第一歩です。</p>
     <div class="line-box" id="lineBox"></div>
     <a class="btn btn-line" href="https://lin.ee/vgRykdu" target="_blank" rel="noopener">公式ラインを友だち追加する</a>
     <button class="btn btn-sub" onclick="restart()">もう一回やる</button>
@@ -200,28 +199,37 @@
 <script>
   // 出す順番は固定（紙の診断と同じ）。type は A・B・C
   const questions = [
-    { type: "A", text: "家族や友だちの機嫌が悪いと、自分までどんよりした気分になる。" },
-    { type: "B", text: "家族の部屋や持ち物に、ひと声かけずに入ったりさわったりしてしまう。" },
-    { type: "C", text: "家族や友だちが泣いたり怒ったりしていると、その場をはなれたくなる。" },
-    { type: "A", text: "自分がしたいことより、相手がしてほしいことを先にしてしまう。" },
-    { type: "C", text: "けんかになりそうだと、めんどうで、その人と関わらないようにする。" },
-    { type: "B", text: "自分のやり方が正しいと思うと、相手にも同じようにしてほしくなる。" },
-    { type: "A", text: "たのまれると断れず、つい「いいよ」と言ってしまう。" },
-    { type: "C", text: "相談されても、「それは自分でなんとかして」と思ってしまう。" },
-    { type: "B", text: "相手が思いどおりに動いてくれないと、むっとしてしまう。" },
-    { type: "A", text: "家族や友だちの悩みを、自分のことのように抱えこんでしまう。" },
-    { type: "B", text: "友だちや家族が悩んでいると、話を聞く前に「こうしたらいいよ」と言ってしまう。" },
-    { type: "C", text: "家族でも、自分の時間やペースをじゃまされると、すごくいやな気持ちになる。" },
-    { type: "A", text: "人と長くいっしょにいると、ぐったり疲れてしまう。" },
-    { type: "C", text: "人と深い話をするのが、なんとなくにがてに感じる。" },
-    { type: "B", text: "アドバイスを聞いてもらえないと、「なんでわかってくれないの」とイライラする。" }
+    { type: "A", text: "家族や友だちの機嫌が悪いと、自分もどんよりした気分になる。" },
+    { type: "B", text: "家族の部屋や持ち物を、何も言わず整えたり借りたりすることがある。" },
+    { type: "C", text: "家族や友だちが泣いたり怒ったりしているときは、少しはなれて落ち着くのを待つ。" },
+    { type: "A", text: "自分がしたいことより、相手がよろこぶことを選びたい。" },
+    { type: "C", text: "けんかになりそうなときは、少し距離をおいて、頭を冷やす。" },
+    { type: "B", text: "うまくいったやり方は、家族や友だちにも教えてあげたくなる。" },
+    { type: "A", text: "相手の「お願い」は、できるだけかなえてあげたい。" },
+    { type: "C", text: "相談にのるときには、深入りしすぎないように気をつけている。" },
+    { type: "B", text: "相手が思うように動いてくれないと、イラッとする。" },
+    { type: "A", text: "家族や友だちの悩みを聴くと、自分のことのようにつらくなる。" },
+    { type: "B", text: "悩んでいる人がいると、自分なりに解決策を考えて伝える。" },
+    { type: "C", text: "予定を立てる時は、自分の時間やペースを守るようにしている。" },
+    { type: "A", text: "「いやだな」と思っても、まわりの空気を崩さないように言わずにおくことが多い。" },
+    { type: "C", text: "自分の気持ちを、あまり顔に出さないほうだ。" },
+    { type: "B", text: "アドバイスを聞いてもらえないと、もやもやする。" },
+    { type: "A", text: "人に合わせて、自分の予定や考えを、変えることが多い。" },
+    { type: "B", text: "家族の予定や決めごとは、自分が先に考えて、決めていくことが多い。" },
+    { type: "C", text: "困ったことがあっても、自分の力でなんとかしようとする。" },
+    { type: "A", text: "家族に部屋や持ち物をさわられても、「まあいいか」と思う。" },
+    { type: "C", text: "自分の気持ちや悩みは、人にはあまり話さない。" },
+    { type: "B", text: "困っていそうな人がいると、たのまれる前に手を出すことが多い。" }
   ];
 
+  // name はタイプ名、word は公式ラインの合言葉（応答メッセージは完全一致でしか動かない）
   const types = {
-    A: { name: "染み込むザル", desc: "相手の気持ちを、自分の中に取りこみやすいタイプ。" },
-    B: { name: "染み出すザル", desc: "自分の考えを、相手の中に流しこみやすいタイプ。" },
-    C: { name: "鉄壁の要塞", desc: "気持ちのやりとりを、さけやすいタイプ。" }
+    A: { name: "踏まれがち", word: "ふまれがち" },
+    B: { name: "踏みがち", word: "ふみがち" },
+    C: { name: "守りがち", word: "まもりがち" }
   };
+  // どのタイプもこの数以下なら「ちょうどいい距離」と出す（7問中3つあてはまれば、そのクセは出ているとみる）
+  const justRightMax = 2;
 
   let current = 0;
   let answers = [];
@@ -273,57 +281,48 @@
     const max = Math.max(count.A, count.B, count.C);
     const card = document.getElementById("resultCard");
     const lineBox = document.getElementById("lineBox");
-    // 公式ラインの自動返信は、合言葉と完全に同じ文字でしか動かないため、合言葉だけを送るよう案内する
-    const words = { A: "しみこむ", B: "しみだす", C: "ようさい" };
-    const sendNote = '<br><span class="note">合言葉だけを送ってください。<br>ほかの文字が入ると、うまく届きません。</span>';
-    // 3つとも同じ数・ひとつもなしのとき：3つの合言葉を並べて出す
-    const allWords =
-      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、気になるタイプの<br>合言葉を送ってね。<br>' +
-      'A：' + words.A + '<br>B：' + words.B + '<br>C：' + words.C + sendNote;
+    const key = t => '<span class="key">' + types[t].word + '</span>';
+    // 枠の中の文はどの場面も同じで、送る合言葉の案内だけが変わる
+    const lineHtml = (sendText, keyTypes) =>
+      '詳しくは、<br>公式ラインでお届けします。<br><br>' +
+      '自分も相手も大切にする<br>人間関係のための<br>ヒントです。<br><br>' +
+      sendText + '<br>' + keyTypes.map(key).join('　') +
+      '<br><span class="note">ほかの文字が入ると、うまく届きません。</span>';
+    const typeNames = ts => ts.map(t => '<p class="type-name">' + types[t].name + '</p>').join('');
 
     if (max === 0) {
-      // ひとつもチェックがつかなかったとき
+      // ひとつもあてはまらなかったとき：やり直しは頼まず、3つの合言葉を並べる
       card.innerHTML =
-        '<p class="type-desc" style="margin:0;">「あてはまる」が、ひとつもありませんでした。</p>' +
-        '<p class="type-desc" style="margin:0;">もう一度、家族や友だちとのふだんの様子を思い出して、やってみてください。</p>';
-      lineBox.innerHTML = allWords;
+        '<p class="type-desc" style="margin:0;">あてはまるものは、ありませんでした。<br>いまは、ちょうどいい距離が<br>とれているようです。</p>';
+      lineBox.innerHTML = lineHtml('気になるタイプの合言葉を送ってね。', ["B", "A", "C"]);
       show("result");
       return;
     }
 
     const top = ["A", "B", "C"].filter(t => count[t] === max);
 
-    // 同じ数のタイプがあるときは、説明を先に出す（タイプ名だけが並ぶと壊れて見えるため）
     let html;
-    if (top.length === 3) {
-      html = '<p class="type-desc">あなたは、3つのタイプが<br>同じ数でした。<br>場面や相手によって、<br>クセが入れかわるのかもしれません。</p>';
-    } else if (top.length === 2) {
-      html = '<p class="type-desc">あなたは、2つのタイプが<br>同じ数でした。<br>どちらも、いまのあなたのクセです。</p>';
+    if (max <= justRightMax) {
+      // どのタイプも少なかったとき
+      html = '<p class="type-desc">いまは、ちょうどいい距離が<br>とれているようです。</p>' +
+        '<p class="result-label">その中で、少しだけ出やすいのは</p>' + typeNames(top);
+      if (top.length === 1) html += '<p class="result-label" style="margin-top:-12px;">タイプ</p>';
+    } else if (top.length === 1) {
+      html = '<p class="result-label">あなたは</p>' + typeNames(top) +
+        '<p class="result-label" style="margin-top:-12px;">タイプ</p>';
     } else {
-      html = '<p class="result-label">あなたは</p>';
+      // 同じ数のタイプが2つ以上あるとき
+      html = '<p class="result-label">あなたは</p>' + typeNames(top) +
+        '<p class="type-desc" style="margin:0;">' +
+        (top.length === 3 ? '3つのタイプが、同じ数でした。' : 'が、同じ数でした。') +
+        '<br>相手や場面によって、<br>使い分けができているんですね！</p>';
     }
-    top.forEach(t => {
-      html +=
-        '<div class="type-block">' +
-        '<p class="type-name">' + t + '　' + types[t].name + '<br><span>タイプ</span></p>' +
-        '<p class="type-desc">' + types[t].desc + '</p>' +
-        '</div>';
-    });
     card.innerHTML = html;
 
-    if (top.length === 3) {
-      lineBox.innerHTML = allWords;
-      show("result");
-      return;
-    }
-
-    const keys = top.map(t => '<span class="key">' + words[t] + '</span>');
-    lineBox.innerHTML =
-      'くわしい結果は、公式ラインで受け取れます。<br>友だち追加して、' +
-      (top.length > 1
-        ? '「' + keys.join('」と「') + '」を、<br>1つずつ送ってね。'
-        : '「' + keys[0] + '」とだけ送ってね。') +
-      sendNote;
+    lineBox.innerHTML = lineHtml(
+      top.length > 1 ? '友だち追加して、合言葉を1つずつ送ってね。' : '友だち追加して、この合言葉を送ってね。',
+      top
+    );
     show("result");
   }
 </script>
