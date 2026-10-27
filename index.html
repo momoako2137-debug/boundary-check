@@ -148,6 +148,11 @@
     font-weight: 700;
     margin: 0 2px;
   }
+  .change-note {
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 24px 0 0;
+  }
   footer {
     text-align: center;
     font-size: 0.85rem;
@@ -190,6 +195,7 @@
     <div class="card" id="resultCard"></div>
     <div class="line-box" id="lineBox"></div>
     <a class="btn btn-line" href="https://lin.ee/vgRykdu" target="_blank" rel="noopener">公式ラインを友だち追加する</a>
+    <p class="change-note" id="changeNote">バウンダリーは、相手や、<br>そのときの状況で変わります。<br>ほかの人を思い浮かべて、<br>やってみるのもおすすめです。</p>
     <button class="btn btn-sub" onclick="restart()">もう一回やる</button>
   </section>
 
@@ -289,6 +295,8 @@
       sendText + '<br>' + keyTypes.map(key).join('　') +
       '<br><span class="note">ほかの文字が入ると、うまく届きません。</span>';
     const typeNames = ts => ts.map(t => '<p class="type-name">' + types[t].name + 'タイプ</p>').join('');
+    // 「相手や状況で変わる」の一言は、同じ数のときだけ出さない（「使い分けができている」と重なるため）
+    document.getElementById("changeNote").style.display = "";
 
     if (max === 0) {
       // ひとつもあてはまらなかったとき：やり直しは頼まず、3つの合言葉を並べる（「ちょうどいい距離」と言い切らない。悩んで答えた人を置いていかないため）
@@ -314,6 +322,7 @@
         '<p class="type-desc" style="margin:0;">' +
         (top.length === 3 ? '3つのタイプが、同じ数でした。' : 'が、同じ数でした。') +
         '<br>相手や場面によって、<br>使い分けができているんですね！</p>';
+      document.getElementById("changeNote").style.display = "none";
     }
     card.innerHTML = html;
 
